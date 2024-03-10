@@ -25,7 +25,9 @@ const StudentSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     }
-});
+},
+    { timestamps: true, versionKey: false }
+);
 
 const Student = mongoose.model("Student", StudentSchema)
 module.exports = Student;
