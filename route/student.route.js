@@ -4,20 +4,51 @@ const Response = require("../utils/response");
 
 const StudentRouter = express.Router()
 
-StudentRouter.get("/getStudent", (req, res) => {
-    return res.send({
-        message: "Student Router Working Without Error!"
-    });
+StudentRouter.get("/getAll", async (req, res) => {
+    const allStudents = await Student.find()
+
+    return Response(res, 200, true, "", allStudents)
 });
+
+StudentRouter.get("/get-student/:id", async (req, res) => {
+    const studentId = req.params.id
+
+    // const student = await Student.findOne({
+    //     _id: studentId
+    // })
+
+    // const student = await Student.find({ 
+    //     _id: studentId
+    // })
+
+    const student = await Student.findById(studentId)
+
+    console.log(student)
+
+    if (student) {
+        return Response(res, 200, true, "", student)
+    }
+
+})
 
 
 StudentRouter.post("/register", async (req, res) => {
     const body = req.body
 
+    const isEmailCheck = await Student.find({
+        email: body.email
+    })
+
+    if (isEmailCheck.length > 0) {
+        return Response(res, 400, false, "Email already used..!", [])
+    }
+
     // const newStudent = new Student(body)
     // const createdUser = await newStudent.save()
 
     const createdUser = await Student.create(body)
+
+    console.log("createdUser", createdUser)
 
     if (createdUser) {
         // return res.status(201).send({
@@ -38,8 +69,42 @@ StudentRouter.post("/register", async (req, res) => {
 
         return Response(res, 500, false, "Fail to Create User!", createdUser)
     }
+})
 
-    console.log("createdUser", createdUser)
+StudentRouter.put("/update-student/:id", async (req, res) => {
+    const studentId = req.params.id
+    const request = req.body
+    const student = await Student.findById(studentId)
+
+    console.log(student)
+
+    if (student) {
+        student.firstName = request.firstName
+        student.lastName = request.lastName
+        student.degree = request.degree
+
+        // const updatedStudent = await Student.findByIdAndUpdate(studentId, student)
+        const updatedStudent = await student.save()
+
+        return Response(res, 200, true, "Updated Successfully..!", updatedStudent)
+    } else {
+        return Response(res, 404, false, "Student not found..!", [])
+    }
+})
+
+StudentRouter.delete("/delete-student/:id", async (req, res) => {
+    const studentId = req.params.id
+    const student = await Student.findById(studentId)
+
+    if (student) {
+
+        const deletedStudent = await Student.findByIdAndDelete(studentId, student)
+
+        return Response(res, 200, true, "Deleted Successfully..!", deletedStudent)
+
+    } else {
+        return Response(res, 404, false, "Student not found..!", [])
+    }
 })
 
 

@@ -8,6 +8,7 @@ const Response = (res, statusCode, isSuccessful, message, data) => {
             data: data
         }
     )
+    console.log("Data", data)
 }
 
 module.exports = Response
