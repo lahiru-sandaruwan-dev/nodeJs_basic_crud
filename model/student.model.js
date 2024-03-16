@@ -24,6 +24,11 @@ const StudentSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true
+    },
+
+    studentStatus: {
+        type: Number,
+        default: 1
     }
 },
     { timestamps: true, versionKey: false }

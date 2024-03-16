@@ -3,6 +3,7 @@ require("dotenv").config()
 const mongoose = require("mongoose")
 const bodyParser = require("body-parser")
 const cors = require("cors")
+const Constant = require("./constants")
 
 const app = express()
 // app.use(bodyParser.json())
@@ -15,7 +16,7 @@ const URL = process.env.MONGO_DB_URL
 const StudentRouter = require("./route/student.route")
 
 //use routes
-app.use("/api/student", StudentRouter)
+app.use(Constant.API.PREFIX.concat("/student"), StudentRouter)
 
 mongoose.set("strictQuery", true)
 
