@@ -14,7 +14,7 @@ const UserSchema = mongoose.Schema({
         required: [true, "Email is Required!"],
         validate: {
             validator: (value) => {
-                return /([!# - '*+/-9=?A-Z^-~-]+(\.[!#-' * +/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])/.test(value);
+                return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value);
                 value
             },
             message: "Invalid Email Address!"
@@ -25,13 +25,18 @@ const UserSchema = mongoose.Schema({
         required: [true, "User Picture is Required!"]
     },
 
+    password: {
+        type: String,
+        required: [true, "Password is Required!"]
+    },
+
     role: {
         type: String,
         required: [true, "Role is Required!"],
         enum: {
-            value: [Constant.USER.ADMIN, Constant.USER.USER],
+            values: [Constant.USER.ADMIN, Constant.USER.USER],
             message: "Valid Role is Required!"
-        }
+        },
     },
 },
     {
