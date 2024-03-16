@@ -4,6 +4,13 @@ const SaveUser = async (obj) => {
     return await obj.save()
 }
 
+const findByEmail = async (email) => {
+    return await User.findOne({
+        email: email
+    })
+}
+
 module.exports = {
-    SaveUser
+    SaveUser,
+    findByEmail
 }
