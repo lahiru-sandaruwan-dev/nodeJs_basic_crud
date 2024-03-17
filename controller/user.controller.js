@@ -5,6 +5,7 @@ const { StatusCodes } = require("http-status-codes")
 const NotFoundError = require("../errors/error.classes/NotFoundError")
 const BadRequestError = require("../errors/error.classes/BadRequestError")
 const Response = require("../utils/response")
+const UnauthorizedError = require("../errors/error.classes/UnauthorizedError")
 
 const UserRegister = async (req, res) => {
     const body = req.body
@@ -24,18 +25,47 @@ const UserRegister = async (req, res) => {
         const createdUser = await UserService.SaveUser(newUser)
 
         return Response(res, StatusCodes.CREATED, true, "User Created Successful!", createdUser);
-        // console.log(newUser)
-
 
     } catch (error) {
-        console.log(error)
         throw error
     }
 
-    // throw new NotFoundError("User Not Found")
-    // console.log(newUser)
+}
+
+const UserLogin = async (req, res) => {
+    let credentials = req.body
+
+    const user = await UserService.findByEmail(credentials.email)
+
+    if(!user) throw new NotFoundError("Invalid Email Address!")
+
+    const isPasswordMatch = await helperUtil.comparePassword(credentials.password, user.password)
+
+    if(!isPasswordMatch) throw new UnauthorizedError("Incorrect Password!")
+
+    let payload = {
+        id: user._id,
+        role: user.role
+    }
+
+    const token = helperUtil.signToken(payload)
+
+    return Response(res, StatusCodes.OK, true, "Login Successful!", {token})
+
+    // if(user){
+    //     const isPasswordMatch = await helperUtil.comparePassword(credentials.password, user.password)
+    //     if(isPasswordMatch){
+    //     } else {
+    //         throw new UnauthorizedError("Incorrect Password!")
+    //     }
+    //     console.log(isPasswordMatch)
+    // } else {
+    //     throw new NotFoundError("Invalid Email Address!")
+    // }
+    // console.log(user)
 }
 
 module.exports = {
-    UserRegister
+    UserRegister,
+    UserLogin
 }
