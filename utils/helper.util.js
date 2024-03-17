@@ -20,8 +20,19 @@ const signToken = (obj) => {
     })
 }
 
+const extractToken = (bearerToken) => {
+    const bearerArray = bearerToken.split(" ")
+    if(bearerArray.length === 2){
+        return bearerArray[1]
+    } else {
+        return null
+    }
+}
+
+
 module.exports = {
     getEncryptedPassword,
     comparePassword,
-    signToken
+    signToken,
+    extractToken
 }

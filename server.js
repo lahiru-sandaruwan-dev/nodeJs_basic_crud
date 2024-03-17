@@ -16,10 +16,12 @@ const PORT = process.env.PORT || 4000
 //import routes
 const StudentRouter = require("./route/student.route")
 const UserRouter = require("./route/user.route");
+const ProductRouter = require("./route/product.route");
 
 //use routes
 app.use(Constant.API.PREFIX.concat("/student"), StudentRouter)
 app.use(Constant.API.PREFIX.concat("/user"), UserRouter)
+app.use(Constant.API.PREFIX.concat("/product"), ProductRouter)
 app.use(errorHandleMiddleware)
 
 // app.use((req, res, next) => {

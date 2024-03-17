@@ -50,7 +50,7 @@ const UserLogin = async (req, res) => {
 
     const token = helperUtil.signToken(payload)
 
-    return Response(res, StatusCodes.OK, true, "Login Successful!", {token})
+    return Response(res, StatusCodes.OK, true, "Login Successful!", {token , role: user.role})
 
     // if(user){
     //     const isPasswordMatch = await helperUtil.comparePassword(credentials.password, user.password)
